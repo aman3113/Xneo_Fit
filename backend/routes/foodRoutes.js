@@ -1,13 +1,42 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Food = mongoose.model("Food");
-const User = mongoose.model("User");
 const foodRouter = express.Router();
 
 foodRouter.get("/", async (req, res) => {
 	try {
-		const foods = await Food.find({ userId: req.userId });
-		res.json(foods);
+		const userId = req.userId;
+		const foodItems = await Food.find({ userId: userId });
+
+		const foodGroups = {};
+
+		foodItems.forEach((foodItem) => {
+			// Extract the date part from the createdAt timestamp
+			const foodDate = foodItem.createdAt.toDateString();
+
+			if (!foodGroups[foodDate]) {
+				foodGroups[foodDate] = {
+					date: foodItem.createdAt,
+					foodItems: [],
+				};
+			}
+
+			foodGroups[foodDate].foodItems.push({
+				foodName: foodItem.foodName,
+				calories: foodItem.calories,
+				protein: foodItem.protein,
+				carbohydrates: foodItem.carbohydrates,
+				fat: foodItem.fat,
+			});
+		});
+
+		// Convert the object into an array of grouped food items
+		const groupedFoodItems = Object.values(foodGroups);
+
+		// Sort the grouped food items by date in descending order (latest items first)
+		groupedFoodItems.sort((a, b) => b.date - a.date);
+
+		res.json(groupedFoodItems);
 	} catch (error) {
 		res
 			.status(500)

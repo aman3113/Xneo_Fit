@@ -6,8 +6,36 @@ const exerciseRouter = express.Router();
 
 exerciseRouter.get("/", async (req, res) => {
 	try {
-		const exercises = await Exercise.find({ userId: req.userId });
-		res.json(exercises);
+		const userId = req.userId;
+		const exercises = await Exercise.find({ userId: userId });
+
+		const exerciseGroups = {};
+
+		exercises.forEach((exercise) => {
+			// Extract the date part from the createdAt timestamp
+			const exerciseDate = exercise.createdAt.toDateString();
+
+			if (!exerciseGroups[exerciseDate]) {
+				exerciseGroups[exerciseDate] = {
+					date: exercise.createdAt,
+					exercises: [],
+				};
+			}
+
+			exerciseGroups[exerciseDate].exercises.push({
+				exerciseName: exercise.exerciseName,
+				duration: exercise.duration,
+				caloriesBurned: exercise.caloriesBurned,
+			});
+		});
+
+		// Convert the object into an array of grouped exercises
+		const groupedExercises = Object.values(exerciseGroups);
+
+		// Sort the grouped exercises by date in descending order (latest exercises first)
+		groupedExercises.sort((a, b) => b.date - a.date);
+
+		res.json(groupedExercises);
 	} catch (error) {
 		res
 			.status(500)
