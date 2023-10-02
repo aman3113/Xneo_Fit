@@ -26,6 +26,7 @@ exerciseRouter.get("/", async (req, res) => {
 				exerciseName: exercise.exerciseName,
 				duration: exercise.duration,
 				caloriesBurned: exercise.caloriesBurned,
+				exerciseId: exercise._id,
 			});
 		});
 

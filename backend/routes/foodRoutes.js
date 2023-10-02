@@ -27,6 +27,7 @@ foodRouter.get("/", async (req, res) => {
 				protein: foodItem.protein,
 				carbohydrates: foodItem.carbohydrates,
 				fat: foodItem.fat,
+				foodId: foodItem._id,
 			});
 		});
 
