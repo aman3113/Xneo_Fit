@@ -12,6 +12,7 @@ const authRouter = require("./routes/authRoutes");
 const exerciseRouter = require("./routes/exerciseRoutes");
 const foodRouter = require("./routes/foodRoutes");
 const goalRouter = require("./routes/goalRoutes");
+const userRouter = require("./routes/userRoutes");
 const requiresAuth = require("./middlewares/requiresAuth");
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/v1/auth", authRouter);
 app.use("/v1/exercises", requiresAuth, exerciseRouter);
 app.use("/v1/food", requiresAuth, foodRouter);
 app.use("/v1/goal", requiresAuth, goalRouter);
+app.use("/v1/user", requiresAuth, userRouter);
 
 app.get("/", (req, res) => {
 	res.send("Hello this is a Xneo Fit API by Aman.");

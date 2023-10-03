@@ -66,7 +66,9 @@ foodRouter.post("/", async (req, res) => {
 			});
 		}
 
-		const calories = 4 * (protein + carbohydrates) + 9 * fat;
+		const calories = parseFloat(
+			4 * (parsedProtein + parsedCarbs) + 9 * parsedFat
+		);
 
 		const newFood = new Food({
 			userId: req.userId,

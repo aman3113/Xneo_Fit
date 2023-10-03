@@ -93,4 +93,23 @@ goalRouter.delete("/:goalId", async (req, res) => {
 	}
 });
 
+goalRouter.post("/:goalId", async (req, res) => {
+	try {
+		const goalId = req.params.goalId;
+		const updatedGoalData = req.body;
+		const updatedGoal = await Goal.findByIdAndUpdate(goalId, updatedGoalData, {
+			new: true,
+		});
+
+		if (!updatedGoal) {
+			return res.status(404).json({ message: "Goal not found" });
+		}
+		res.json(updatedGoal);
+	} catch (error) {
+		res
+			.status(500)
+			.json({ message: "Cannot update goal", error: error.message });
+	}
+});
+
 module.exports = goalRouter;
