@@ -18,7 +18,7 @@ const DayExercises = ({ exercisesArr }) => {
 						<p>{exercise.exerciseName}</p>
 						<div className="flex gap-5">
 							<span className="flex gap-1 items-center">
-								{exercise.duration}m <BiTime />
+								{exercise.duration}m <BiTime className="text-blue-500" />
 							</span>
 							<span className="flex gap-1 items-center">
 								{exercise.caloriesBurned.toFixed(2)}cal{" "}
@@ -29,7 +29,7 @@ const DayExercises = ({ exercisesArr }) => {
 					<div>
 						<AiOutlineDelete
 							size={25}
-							className="cursor-pointer"
+							className="cursor-pointer text-gray-500"
 							onClick={() => dispatch(deleteExercise(exercise.exerciseId))}
 						/>
 					</div>

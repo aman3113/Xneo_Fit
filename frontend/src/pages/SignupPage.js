@@ -6,6 +6,7 @@ import { BiUser } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useToast } from "@chakra-ui/react";
+import signup from "../images/signup.jpg";
 import api from "../utils/Axios";
 import { setAuthToken } from "../redux/AuthSlice";
 
@@ -72,7 +73,7 @@ const SignUpPage = () => {
 			<div className="flex items-center justify-center min-h-[80vh]">
 				<section className="flex flex-col sm:flex-row items-center w-full justify-center">
 					<div className="w-[50%] ">
-						<img src={""} alt="login here" />
+						<img src={signup} alt="login here" />
 					</div>
 					<div className=" w-full sm:w-[50%] flex flex-col items-center p-2">
 						<p className="text-2xl font-bold text-center">
@@ -111,7 +112,8 @@ const SignUpPage = () => {
 									value={formData.email}
 									onChange={handleChange}
 									placeholder="Your email"
-									className="border-none outline-none"
+									required
+									className="border-none outline-none w-full"
 								/>
 							</div>
 							<div className="flex gap-2 border-black rounded-md items-center border-2 p-2 px-3">
@@ -122,7 +124,8 @@ const SignUpPage = () => {
 									value={formData.password}
 									onChange={handleChange}
 									placeholder="Enter your password"
-									className="outline-none"
+									className="border-none outline-none w-full"
+									required
 								/>
 								<div
 									className="ml-auto cursor-pointer"
@@ -133,14 +136,14 @@ const SignUpPage = () => {
 							</div>
 							<button
 								onClick={handleSignUP}
-								className="border-2  border-black rounded-md bg-blue-950 text-white p-2 px-3 w-full"
+								className="border-2  border-black rounded-md bg-pink-400 text-white p-2 px-3 w-full"
 							>
 								Sign Up
 							</button>
 						</form>
 						<p>
-							Don't have an account?
-							<Link className="text-blue-800 font-semibold ml-1" to="/login">
+							Already have an account?
+							<Link className="text-pink-800 font-semibold ml-1" to="/login">
 								Log In
 							</Link>
 						</p>

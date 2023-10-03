@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { addExercise } from "../utils/Thunks";
 import DayExercises from "../components/DayExercises";
 import { formatDate } from "../utils/utils";
+import { AiFillFire } from "react-icons/ai";
 
 const ExercisePage = () => {
 	const dispatch = useDispatch();
 	const { exercises, loading, error } = useSelector((store) => store.exercise);
 	const [formData, setFormData] = useState({
 		exerciseName: "",
-		duration: null,
+		duration: "",
 		metabolicEquivalent: "",
 	});
 
@@ -26,13 +27,13 @@ const ExercisePage = () => {
 		dispatch(addExercise(formData));
 		setFormData({
 			exerciseName: "",
-			duration: null,
+			duration: "",
 			metabolicEquivalent: "",
 		});
 	}
 
 	return (
-		<div className=" h-full">
+		<div className=" h-full p-4">
 			<h1 className="text-2xl md:text-3xl text-center font-bold pb-3">
 				My Exercises Track
 			</h1>
@@ -73,18 +74,31 @@ const ExercisePage = () => {
 					</button>
 				</form>
 			</div>
-			<div className="flex flex-wrap gap-3 justify-center">
-				{exercises.map((exercise) => (
-					<div
-						key={exercise.date}
-						className="p-2 shadow-md shadow-gray-300 rounded-lg min-w-[250px]"
-					>
-						<p className="font-bold capitalize text-lg py-2">
-							{formatDate(exercise.date.toString())}
-						</p>
-						<DayExercises exercisesArr={exercise.exercises} />
-					</div>
-				))}
+			<div className="flex flex-wrap gap-5 justify-center  py-5">
+				{exercises?.map((exercise) => {
+					const totalCalories = exercise.exercises.reduce(
+						(acc, curr) => (acc += curr.caloriesBurned),
+						0
+					);
+
+					return (
+						<div
+							key={exercise.date}
+							className="p-2 border border-gray-400 shadow-md shadow-gray-300 rounded-lg min-w-[250px]"
+						>
+							<div className="flex justify-between items-center">
+								<p className="font-bold capitalize text-lg py-2">
+									{formatDate(exercise.date.toString())}
+								</p>
+								<strong className="flex gap-2 items-center">
+									{totalCalories.toFixed(2)}cal{" "}
+									<AiFillFire className="text-yellow-400" />
+								</strong>
+							</div>
+							<DayExercises exercisesArr={exercise.exercises} />
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

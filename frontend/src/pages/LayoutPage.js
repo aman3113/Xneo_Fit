@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import SideBar from "../components/SideBar";
-import { fetchExercises, fetchFood, fetchGoals } from "../utils/Thunks";
+import {
+	fetchExercises,
+	fetchFood,
+	fetchGoals,
+	fetchUser,
+} from "../utils/Thunks";
 
 const LayoutPage = () => {
 	const isLoggedIn = useSelector((store) => store.auth.isLoggedIn);
@@ -12,6 +17,7 @@ const LayoutPage = () => {
 		dispatch(fetchExercises());
 		dispatch(fetchFood());
 		dispatch(fetchGoals());
+		dispatch(fetchUser());
 	}, []);
 
 	if (!isLoggedIn) {

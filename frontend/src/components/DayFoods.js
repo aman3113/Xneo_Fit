@@ -9,10 +9,19 @@ const DayFoods = ({ foodsArr }) => {
 			{foodsArr.map((food) => (
 				<div
 					key={food.foodId}
-					className="flex border-y border-gray-400 justify-between items-center p-2"
+					className="flex border-y border-gray-400 justify-between items-start p-2"
 				>
 					<div>
-						<p>{food.foodName}</p>
+						<div className="flex items-center justify-between">
+							<strong>{food.foodName}</strong>
+							<div>
+								<AiOutlineDelete
+									size={25}
+									className="cursor-pointer text-gray-500"
+									onClick={() => dispatch(deleteFood(food.foodId))}
+								/>
+							</div>
+						</div>
 						<div className="flex gap-5">
 							<table>
 								<thead>
@@ -43,18 +52,11 @@ const DayFoods = ({ foodsArr }) => {
 									<tr>
 										<th>Total Calories</th>
 										<td></td>
-										<td>{food.calories} cal</td>
+										<th>{food.calories} cal</th>
 									</tr>
 								</tfoot>
 							</table>
 						</div>
-					</div>
-					<div>
-						<AiOutlineDelete
-							size={25}
-							className="cursor-pointer"
-							onClick={() => dispatch(deleteFood(food.foodId))}
-						/>
 					</div>
 				</div>
 			))}

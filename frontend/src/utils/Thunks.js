@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "./Axios";
+import { clearAuthToken } from "../redux/AuthSlice";
 
 // Exercise actions
 
@@ -173,6 +174,91 @@ export const deleteGoal = createAsyncThunk(
 			dispatch(fetchGoals());
 
 			return goalId;
+		} catch (error) {
+			throw error;
+		}
+	}
+);
+
+export const updateGoal = createAsyncThunk(
+	"goals/update",
+	async ({ goalId, updatedGoalData }, { getState, dispatch }) => {
+		const authToken = getState().auth.authToken;
+		try {
+			// Make a PUT request to update the goal
+			const response = await api.post(
+				`/goal/${goalId}`,
+				JSON.stringify(updatedGoalData),
+				{
+					headers: {
+						Authorization: authToken,
+					},
+				}
+			);
+
+			// Dispatch fetchGoals to update the goals array in the store after successful update
+			dispatch(fetchGoals());
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+);
+
+// User actions
+
+// Action to fetch user information
+export const fetchUser = createAsyncThunk(
+	"user/fetch",
+	async (_, { getState }) => {
+		const authToken = getState().auth.authToken;
+		const response = await api.get("/user", {
+			headers: {
+				Authorization: authToken,
+			},
+		});
+		return response.data;
+	}
+);
+
+// Action to update user information
+export const updateUser = createAsyncThunk(
+	"user/update",
+	async (userData, { getState, dispatch }) => {
+		const authToken = getState().auth.authToken;
+
+		try {
+			const response = await api.post("/user", JSON.stringify(userData), {
+				headers: {
+					Authorization: authToken,
+				},
+			});
+
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+);
+
+// Action to delete user
+export const deleteUser = createAsyncThunk(
+	"user/delete",
+	async (_, { getState, dispatch }) => {
+		const authToken = getState().auth.authToken;
+
+		try {
+			// Make a DELETE request to delete the user
+			await api.delete("/user", {
+				headers: {
+					Authorization: authToken,
+				},
+			});
+
+			// Dispatch a logout action to clear user authentication data
+			dispatch(clearAuthToken());
+
+			return true; // Indicate successful deletion
 		} catch (error) {
 			throw error;
 		}

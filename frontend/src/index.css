@@ -25,3 +25,19 @@ input {
 input:focus {
 	outline: none;
 }
+
+th,
+td {
+	padding: 5px;
+}
+
+th {
+	font-weight: 600;
+}
+
+select {
+	border: 1px solid gray;
+	border-radius: 10px;
+	padding: 5px 10px;
+	cursor: pointer;
+}

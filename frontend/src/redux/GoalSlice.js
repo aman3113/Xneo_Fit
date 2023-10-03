@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addGoal, deleteGoal, fetchGoals } from "../utils/Thunks";
+import { addGoal, deleteGoal, fetchGoals, updateGoal } from "../utils/Thunks";
 
 const GoalSlice = createSlice({
 	name: "goals",
@@ -47,6 +47,18 @@ const GoalSlice = createSlice({
 				state.error = null;
 			})
 			.addCase(deleteGoal.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.error.message;
+			})
+			.addCase(updateGoal.pending, (state) => {
+				state.loading = true;
+				state.error = null;
+			})
+			.addCase(updateGoal.fulfilled, (state) => {
+				state.loading = false;
+				state.error = null;
+			})
+			.addCase(updateGoal.rejected, (state, action) => {
 				state.loading = false;
 				state.error = action.error.message;
 			});

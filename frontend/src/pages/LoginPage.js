@@ -7,6 +7,7 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@chakra-ui/react";
 import { setAuthToken } from "../redux/AuthSlice";
+import login from "../images/login.jpg";
 import api from "../utils/Axios";
 
 const LoginPage = () => {
@@ -35,8 +36,8 @@ const LoginPage = () => {
 			const data = resp.data;
 			dispatch(setAuthToken(data.token));
 			toast({
-				title: "Account created.",
-				description: "We've created your account for you.",
+				title: "User LoggedIn",
+				description: "Welcome back, we missed you.",
 				status: "success",
 				duration: 3000,
 				isClosable: true,
@@ -65,7 +66,11 @@ const LoginPage = () => {
 			<div className="flex items-center justify-center min-h-[80vh]">
 				<section className="flex flex-col sm:flex-row items-center w-full">
 					<div className=" w-[50%] ">
-						<img src={""} alt="login here" />
+						<img
+							src={login}
+							className="h-full max-h-[80vh] w-full object-contain"
+							alt="login here"
+						/>
 					</div>
 					<div className=" w-full sm:w-[50%] flex flex-col items-center p-2">
 						<p className="text-2xl font-bold text-center">Heyy! Welcome Back</p>
@@ -84,7 +89,8 @@ const LoginPage = () => {
 									value={formData.email}
 									onChange={handleChange}
 									placeholder="Your email"
-									className="border-none outline-none"
+									className="border-none outline-none w-full"
+									required
 								/>
 							</div>
 							<div className="flex gap-2 border-black rounded-md items-center border-2 p-2 px-3">
@@ -95,7 +101,8 @@ const LoginPage = () => {
 									value={formData.password}
 									onChange={handleChange}
 									placeholder="Enter your password"
-									className="outline-none"
+									className="border-none outline-none w-full"
+									required
 								/>
 								<div
 									className="ml-auto cursor-pointer"
@@ -106,14 +113,14 @@ const LoginPage = () => {
 							</div>
 							<button
 								onClick={handleLogin}
-								className="border-2  border-black rounded-md bg-blue-950 text-white p-2 px-3 w-full"
+								className="border-2  border-black rounded-md bg-pink-400 text-white p-2 px-3 w-full"
 							>
 								Log In
 							</button>
 						</form>
 						<p>
 							Don't have an account?
-							<Link className="text-blue-800 font-semibold ml-1" to="/signup">
+							<Link className="text-pink-800 font-semibold ml-1" to="/signup">
 								Sign Up
 							</Link>
 						</p>

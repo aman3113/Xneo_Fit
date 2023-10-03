@@ -9,9 +9,9 @@ const FoodPage = () => {
 	const dispatch = useDispatch();
 	const [formData, setFormData] = useState({
 		foodName: "",
-		protein: null,
-		carbohydrates: null,
-		fat: null,
+		protein: "",
+		carbohydrates: "",
+		fat: "",
 	});
 
 	function handleInputChange(e) {
@@ -27,14 +27,14 @@ const FoodPage = () => {
 		dispatch(addFood(formData));
 		setFormData({
 			foodName: "",
-			protein: null,
-			carbohydrates: null,
-			fat: null,
+			protein: "",
+			carbohydrates: "",
+			fat: "",
 		});
 	}
 
 	return (
-		<div className=" h-full">
+		<div className=" h-full p-4">
 			<h1 className="text-2xl md:text-3xl text-center font-bold pb-3">
 				My Foods Track
 			</h1>
@@ -86,18 +86,27 @@ const FoodPage = () => {
 					</button>
 				</form>
 			</div>
-			<div className="flex flex-wrap gap-3 justify-center p-2">
-				{foods.map((food) => (
-					<div
-						key={food.date}
-						className="p-2 shadow-md shadow-gray-300 rounded-lg min-w-[250px]"
-					>
-						<p className="font-bold capitalize text-lg py-2">
-							{formatDate(food.date.toString())}
-						</p>
-						<DayFoods foodsArr={food.foodItems} />
-					</div>
-				))}
+			<div className="flex flex-wrap gap-5 justify-center py-5">
+				{foods.map((food) => {
+					const totalCalories = food.foodItems.reduce(
+						(acc, curr) => (acc += Number(curr.calories)),
+						0
+					);
+					return (
+						<div
+							key={food.date}
+							className="p-2 border border-gray-400 shadow-md shadow-gray-300 rounded-lg min-w-[260px]"
+						>
+							<div className="flex justify-between items-center">
+								<p className="font-bold capitalize text-lg py-2">
+									{formatDate(food.date.toString())}
+								</p>
+								<strong>{totalCalories} cal</strong>
+							</div>
+							<DayFoods foodsArr={food.foodItems} />
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);
