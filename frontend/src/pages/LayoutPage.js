@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import SideBar from "../components/SideBar";
+
 import {
 	fetchExercises,
 	fetchFood,

@@ -21,7 +21,6 @@ export const addExercise = createAsyncThunk(
 	"exercises/add",
 	async (exerciseData, { getState, dispatch }) => {
 		const authToken = getState().auth.authToken;
-
 		try {
 			const response = await api.post(
 				"/exercises",

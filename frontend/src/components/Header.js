@@ -11,12 +11,16 @@ import {
 	DrawerContent,
 	DrawerCloseButton,
 } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+
 import { deleteUser, updateUser } from "../utils/Thunks";
 import { Link } from "react-router-dom";
 
 const Header = () => {
 	const dispatch = useDispatch();
-	const user = useSelector((store) => store.user.user);
+	const toast = useToast();
+	const { user, error, loading } = useSelector((store) => store.user);
 	const isLoggedIn = useSelector((store) => store.auth.isLoggedIn);
 	const [openUserModal, setOpenUserModal] = useState(false);
 	const [editProfile, setEditProfile] = useState(false);
@@ -49,6 +53,15 @@ const Header = () => {
 			bodyWeight: user?.bodyWeight,
 		});
 	}, [isLoggedIn]);
+
+	!openUserModal &&
+		toast({
+			title: "Account created.",
+			description: "We've created your account for you.",
+			status: "success",
+			duration: 3000,
+			isClosable: true,
+		});
 	return (
 		<header className="h-[10vh] p-3 px-5 flex justify-between items-center">
 			<Link to="/dashboard" className="w-[80px] md:w-[200px] h-full">
@@ -106,102 +119,117 @@ const Header = () => {
 					</DrawerHeader>
 
 					<DrawerBody>
-						<div className="flex flex-col items-center gap-4">
-							<Avatar
-								name={user?.firstName}
-								size="2xl"
-								src={user?.profilePicture}
-								className="cursor-pointer"
-								onClick={() => setOpenUserModal(true)}
-							/>
-							{editProfile ? (
-								<button
-									className="border border-black bg-red-400 hover:bg-red-500 px-3 py-1 rounded-md text-white"
-									onClick={() => setEditProfile(false)}
-								>
-									Cancel
-								</button>
-							) : (
-								<button
-									className="border border-black bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md"
-									onClick={() => setEditProfile(true)}
-								>
-									Edit
-								</button>
-							)}
-							{editProfile ? (
-								<form
-									onSubmit={handleFormSubmit}
-									className="flex flex-col gap-3 items-center w-full"
-								>
-									<label>
-										<strong>First Name</strong>
-										<input
-											type="text"
-											name="firstName"
-											value={formData.firstName}
-											onChange={handleInputChange}
-										/>
-									</label>
-									<label>
-										<strong>Last Name</strong>
-										<input
-											type="text"
-											name="lastName"
-											value={formData.lastName}
-											onChange={handleInputChange}
-										/>
-									</label>
-									<label>
-										<strong>Profile Picture</strong>
-										<input
-											type="url"
-											name="profilePicture"
-											value={formData.profilePicture}
-											onChange={handleInputChange}
-										/>
-									</label>
-									<label>
-										<strong>Body Weight</strong>
-										<input
-											type="number"
-											name="bodyWeight"
-											value={formData.bodyWeight}
-											onChange={handleInputChange}
-										/>
-									</label>
-									<button className="border border-black bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-white">
-										Save Changes
+						{error && (
+							<p className="text-2xl text-red-600 text-center">{error}</p>
+						)}
+						{loading ? (
+							<div className="flex justify-center">
+								<Spinner
+									thickness="4px"
+									speed="0.65s"
+									emptyColor="gray.200"
+									color="blue.500"
+									size="xl"
+								/>
+							</div>
+						) : (
+							<div className="flex flex-col items-center gap-4">
+								<Avatar
+									name={user?.firstName}
+									size="2xl"
+									src={user?.profilePicture}
+									className="cursor-pointer"
+									onClick={() => setOpenUserModal(true)}
+								/>
+								{editProfile ? (
+									<button
+										className="border border-black bg-red-400 hover:bg-red-500 px-3 py-1 rounded-md text-white"
+										onClick={() => setEditProfile(false)}
+									>
+										Cancel
 									</button>
-								</form>
-							) : (
-								<div>
-									<p>
-										<strong>First Name: </strong>
-										{user?.firstName}
-									</p>
-									<p>
-										<strong>Lat Name: </strong>
-										{user?.lastName}
-									</p>
-									<p>
-										<strong>Email: </strong>
-										{user?.email}
-									</p>
-									<p>
-										<strong>Body weight: </strong>
-										{user?.bodyWeight}kg
-									</p>
-								</div>
-							)}
+								) : (
+									<button
+										className="border border-black bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md"
+										onClick={() => setEditProfile(true)}
+									>
+										Edit
+									</button>
+								)}
+								{editProfile ? (
+									<form
+										onSubmit={handleFormSubmit}
+										className="flex flex-col gap-3 items-center w-full"
+									>
+										<label>
+											<strong>First Name</strong>
+											<input
+												type="text"
+												name="firstName"
+												value={formData.firstName}
+												onChange={handleInputChange}
+											/>
+										</label>
+										<label>
+											<strong>Last Name</strong>
+											<input
+												type="text"
+												name="lastName"
+												value={formData.lastName}
+												onChange={handleInputChange}
+											/>
+										</label>
+										<label>
+											<strong>Profile Picture</strong>
+											<input
+												type="url"
+												name="profilePicture"
+												value={formData.profilePicture}
+												onChange={handleInputChange}
+											/>
+										</label>
+										<label>
+											<strong>Body Weight</strong>
+											<input
+												type="number"
+												name="bodyWeight"
+												value={formData.bodyWeight}
+												onChange={handleInputChange}
+											/>
+										</label>
+										<button className="border border-black bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-white">
+											Save Changes
+										</button>
+									</form>
+								) : (
+									<div>
+										<p>
+											<strong>First Name: </strong>
+											{user?.firstName}
+										</p>
+										<p>
+											<strong>Lat Name: </strong>
+											{user?.lastName}
+										</p>
+										<p>
+											<strong>Email: </strong>
+											{user?.email}
+										</p>
+										<p>
+											<strong>Body weight: </strong>
+											{user?.bodyWeight}kg
+										</p>
+									</div>
+								)}
 
-							<button
-								className="border-2 border-black hover:bg-pink-50 px-3 py-1 rounded-md text-pink-400 font-semibold"
-								onClick={() => dispatch(deleteUser())}
-							>
-								Delete Account
-							</button>
-						</div>
+								<button
+									className="border-2 border-black hover:bg-pink-50 px-3 py-1 rounded-md text-pink-400 font-semibold"
+									onClick={() => dispatch(deleteUser())}
+								>
+									Delete Account
+								</button>
+							</div>
+						)}
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFood } from "../utils/Thunks";
 import { formatDate } from "../utils/utils";
 import DayFoods from "../components/DayFoods";
+import { Spinner } from "@chakra-ui/react";
 
 const FoodPage = () => {
 	const { foods, loading, error } = useSelector((store) => store.food);
@@ -86,28 +87,41 @@ const FoodPage = () => {
 					</button>
 				</form>
 			</div>
-			<div className="flex flex-wrap gap-5 justify-center py-5">
-				{foods.map((food) => {
-					const totalCalories = food.foodItems.reduce(
-						(acc, curr) => (acc += Number(curr.calories)),
-						0
-					);
-					return (
-						<div
-							key={food.date}
-							className="p-2 border border-gray-400 shadow-md shadow-gray-300 rounded-lg min-w-[260px]"
-						>
-							<div className="flex justify-between items-center">
-								<p className="font-bold capitalize text-lg py-2">
-									{formatDate(food.date.toString())}
-								</p>
-								<strong>{totalCalories} cal</strong>
+			{error && <p className="text-2xl text-red-600 text-center">{error}</p>}
+			{loading ? (
+				<div className="flex justify-center">
+					<Spinner
+						thickness="4px"
+						speed="0.65s"
+						emptyColor="gray.200"
+						color="blue.500"
+						size="xl"
+					/>
+				</div>
+			) : (
+				<div className="flex flex-wrap gap-5 justify-center py-5">
+					{foods.map((food) => {
+						const totalCalories = food.foodItems.reduce(
+							(acc, curr) => (acc += Number(curr.calories)),
+							0
+						);
+						return (
+							<div
+								key={food.date}
+								className="p-2 border border-gray-400 shadow-md shadow-gray-300 rounded-lg min-w-[260px]"
+							>
+								<div className="flex justify-between items-center">
+									<p className="font-bold capitalize text-lg py-2">
+										{formatDate(food.date.toString())}
+									</p>
+									<strong>{totalCalories} cal</strong>
+								</div>
+								<DayFoods foodsArr={food.foodItems} />
 							</div>
-							<DayFoods foodsArr={food.foodItems} />
-						</div>
-					);
-				})}
-			</div>
+						);
+					})}
+				</div>
+			)}
 		</div>
 	);
 };

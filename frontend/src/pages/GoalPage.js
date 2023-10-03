@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addGoal } from "../utils/Thunks";
 import SingleGoal from "../components/SingleGoal";
+import { Spinner } from "@chakra-ui/react";
 
 const GoalPage = () => {
 	const { goals, loading, error } = useSelector((store) => store.goal);
@@ -98,11 +99,24 @@ const GoalPage = () => {
 					</button>
 				</form>
 			</div>
-			<div className="flex flex-wrap gap-3 justify-center p-2 py-5">
-				{goals.map((goal) => (
-					<SingleGoal goal={goal} key={goal._id} />
-				))}
-			</div>
+			{error && <p className="text-2xl text-red-600 text-center">{error}</p>}
+			{loading ? (
+				<div className="flex justify-center">
+					<Spinner
+						thickness="4px"
+						speed="0.65s"
+						emptyColor="gray.200"
+						color="blue.500"
+						size="xl"
+					/>
+				</div>
+			) : (
+				<div className="flex flex-wrap gap-3 justify-center p-2 py-5">
+					{goals.map((goal) => (
+						<SingleGoal goal={goal} key={goal._id} />
+					))}
+				</div>
+			)}
 		</div>
 	);
 };

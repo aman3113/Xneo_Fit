@@ -4,6 +4,7 @@ import { addExercise } from "../utils/Thunks";
 import DayExercises from "../components/DayExercises";
 import { formatDate } from "../utils/utils";
 import { AiFillFire } from "react-icons/ai";
+import { Spinner } from "@chakra-ui/react";
 
 const ExercisePage = () => {
 	const dispatch = useDispatch();
@@ -74,32 +75,45 @@ const ExercisePage = () => {
 					</button>
 				</form>
 			</div>
-			<div className="flex flex-wrap gap-5 justify-center  py-5">
-				{exercises?.map((exercise) => {
-					const totalCalories = exercise.exercises.reduce(
-						(acc, curr) => (acc += curr.caloriesBurned),
-						0
-					);
+			{error && <p className="text-2xl text-red-600 text-center">{error}</p>}
+			{loading ? (
+				<div className="flex justify-center">
+					<Spinner
+						thickness="4px"
+						speed="0.65s"
+						emptyColor="gray.200"
+						color="blue.500"
+						size="xl"
+					/>
+				</div>
+			) : (
+				<div className="flex flex-wrap gap-5 justify-center  py-5">
+					{exercises?.map((exercise) => {
+						const totalCalories = exercise.exercises.reduce(
+							(acc, curr) => (acc += curr.caloriesBurned),
+							0
+						);
 
-					return (
-						<div
-							key={exercise.date}
-							className="p-2 border border-gray-400 shadow-md shadow-gray-300 rounded-lg min-w-[250px]"
-						>
-							<div className="flex justify-between items-center">
-								<p className="font-bold capitalize text-lg py-2">
-									{formatDate(exercise.date.toString())}
-								</p>
-								<strong className="flex gap-2 items-center">
-									{totalCalories.toFixed(2)}cal{" "}
-									<AiFillFire className="text-yellow-400" />
-								</strong>
+						return (
+							<div
+								key={exercise.date}
+								className="p-2 border border-gray-400 shadow-md shadow-gray-300 rounded-lg min-w-[250px]"
+							>
+								<div className="flex justify-between items-center">
+									<p className="font-bold capitalize text-lg py-2">
+										{formatDate(exercise.date.toString())}
+									</p>
+									<strong className="flex gap-2 items-center">
+										{totalCalories.toFixed(2)}cal{" "}
+										<AiFillFire className="text-yellow-400" />
+									</strong>
+								</div>
+								<DayExercises exercisesArr={exercise.exercises} />
 							</div>
-							<DayExercises exercisesArr={exercise.exercises} />
-						</div>
-					);
-				})}
-			</div>
+						);
+					})}
+				</div>
+			)}
 		</div>
 	);
 };
