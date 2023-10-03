@@ -8,9 +8,9 @@ import DashboardPage from "./pages/DashboardPage";
 import ExercisePage from "./pages/ExercisePage";
 import FoodPage from "./pages/FoodPage";
 import GoalPage from "./pages/GoalPage";
-import ProfilePage from "./pages/ProfilePage";
 import { Provider } from "react-redux";
 import Store from "./redux/Store";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
 	return (
@@ -23,12 +23,12 @@ function App() {
 							<Route path="/signup" element={<SignupPage />} />
 							<Route path="/login" element={<LoginPage />} />
 							<Route path="/" element={<LayoutPage />}>
-								<Route path="/dashboard" element={<DashboardPage />} />
-								<Route path="/profile" element={<ProfilePage />} />
+								<Route index="true" element={<DashboardPage />} />
 								<Route path="/goal" element={<GoalPage />} />
 								<Route path="/exercise" element={<ExercisePage />} />
 								<Route path="/food" element={<FoodPage />} />
 							</Route>
+							<Route path="*" element={<ErrorPage />} />
 						</Routes>
 					</BrowserRouter>
 				</Provider>

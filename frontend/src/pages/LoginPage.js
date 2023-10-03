@@ -43,7 +43,6 @@ const LoginPage = () => {
 				isClosable: true,
 			});
 		} catch (err) {
-			console.log(err);
 			const data = err.response.data;
 
 			setError(data.error);
@@ -58,7 +57,7 @@ const LoginPage = () => {
 	}
 
 	if (token) {
-		return <Navigate to="/dashboard" />;
+		return <Navigate to="/" />;
 	}
 
 	return (

@@ -27,7 +27,7 @@ const SideBar = () => {
 	return (
 		<div className="w-full md:w-[20%] md:h-full md:py-4 flex justify-evenly  p-2 md:flex-col gap-4">
 			<NavLink
-				to="/dashboard"
+				to="/"
 				className={({ isActive }) =>
 					`${
 						isActive && "text-pink-400 border-blue-800 md:border-l-8"

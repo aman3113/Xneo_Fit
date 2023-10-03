@@ -65,7 +65,7 @@ const SignUpPage = () => {
 	}
 
 	if (token) {
-		return <Navigate to="/profile" />;
+		return <Navigate to="/" />;
 	}
 
 	return (

@@ -12,14 +12,12 @@ import {
 	DrawerCloseButton,
 } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/react";
 
 import { deleteUser, updateUser } from "../utils/Thunks";
 import { Link } from "react-router-dom";
 
 const Header = () => {
 	const dispatch = useDispatch();
-	const toast = useToast();
 	const { user, error, loading } = useSelector((store) => store.user);
 	const isLoggedIn = useSelector((store) => store.auth.isLoggedIn);
 	const [openUserModal, setOpenUserModal] = useState(false);
@@ -54,17 +52,9 @@ const Header = () => {
 		});
 	}, [isLoggedIn]);
 
-	!openUserModal &&
-		toast({
-			title: "Account created.",
-			description: "We've created your account for you.",
-			status: "success",
-			duration: 3000,
-			isClosable: true,
-		});
 	return (
 		<header className="h-[10vh] p-3 px-5 flex justify-between items-center">
-			<Link to="/dashboard" className="w-[80px] md:w-[200px] h-full">
+			<Link to="/" className="w-[80px] md:w-[200px] h-full">
 				<img
 					src={xneoLogo}
 					alt="xneo logo"
