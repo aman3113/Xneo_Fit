@@ -112,6 +112,11 @@ const GoalPage = () => {
 				</div>
 			) : (
 				<div className="flex flex-wrap gap-3 justify-center p-2 py-5">
+					{goals.length === 0 && (
+						<p className="text-2xl text-center pt-8 font-bold text-red-300">
+							Add your First Goal now.
+						</p>
+					)}
 					{goals.map((goal) => (
 						<SingleGoal goal={goal} key={goal._id} />
 					))}

@@ -100,6 +100,11 @@ const FoodPage = () => {
 				</div>
 			) : (
 				<div className="flex flex-wrap gap-5 justify-center py-5">
+					{foods.length === 0 && (
+						<p className="text-2xl text-center pt-8 font-bold text-red-300">
+							Add your First Food now.
+						</p>
+					)}
 					{foods.map((food) => {
 						const totalCalories = food.foodItems.reduce(
 							(acc, curr) => (acc += Number(curr.calories)),

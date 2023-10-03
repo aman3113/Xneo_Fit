@@ -88,6 +88,11 @@ const ExercisePage = () => {
 				</div>
 			) : (
 				<div className="flex flex-wrap gap-5 justify-center  py-5">
+					{exercises.length === 0 && (
+						<p className="text-2xl text-center pt-8 font-bold text-red-300">
+							Add your First exercise now.
+						</p>
+					)}
 					{exercises?.map((exercise) => {
 						const totalCalories = exercise.exercises.reduce(
 							(acc, curr) => (acc += curr.caloriesBurned),

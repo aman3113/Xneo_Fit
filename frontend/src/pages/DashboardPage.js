@@ -8,6 +8,7 @@ import {
 	filterAndCalculateCaloriesConsumed,
 } from "../utils/utils";
 import { AiFillFire } from "react-icons/ai";
+import homeImg from "../images/home.jpg";
 
 const DashboardPage = () => {
 	const { goals, error, loading } = useSelector((store) => store.goal);
@@ -32,6 +33,18 @@ const DashboardPage = () => {
 				</div>
 			) : (
 				<div className="flex flex-col gap-4 pb-5">
+					{goals.length === 0 && (
+						<div>
+							<p className=" text-xl md:text-2xl text-center pt-8 font-bold text-red-300">
+								This is the starting of you fitness journey..
+							</p>
+							<img
+								src={homeImg}
+								className="w-[80%] max-w-[300px] m-auto"
+								alt=""
+							/>
+						</div>
+					)}
 					{goals?.map((goal) => {
 						const targetCalories = goal.targetCaloriesValue;
 						const totalCaloriesBurned = filterAndCalculateCaloriesBurned(
