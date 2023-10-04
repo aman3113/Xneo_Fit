@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
+import { Analytics } from "@vercel/analytics/react";
 import Header from "./components/Header";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -32,6 +33,7 @@ function App() {
 						</Routes>
 					</BrowserRouter>
 				</Provider>
+				<Analytics />
 			</ChakraProvider>
 		</div>
 	);
