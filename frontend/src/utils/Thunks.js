@@ -263,3 +263,31 @@ export const deleteUser = createAsyncThunk(
 		}
 	}
 );
+
+//Signup user
+export const signupUser = createAsyncThunk("user/signup", async (userData) => {
+	try {
+		const response = await api.post("/auth/signup", JSON.stringify(userData), {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		return response.data;
+	} catch (error) {
+		throw error.response.data;
+	}
+});
+
+// Action to log in a user
+export const loginUser = createAsyncThunk("user/login", async (userData) => {
+	try {
+		const response = await api.post("/auth/login", JSON.stringify(userData), {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		return response.data;
+	} catch (error) {
+		throw error.response.data;
+	}
+});

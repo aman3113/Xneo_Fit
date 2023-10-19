@@ -5,10 +5,9 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useToast } from "@chakra-ui/react";
-import { setAuthToken } from "../redux/AuthSlice";
+import { Spinner, useToast } from "@chakra-ui/react";
 import login from "../images/login.jpg";
-import api from "../utils/Axios";
+import { loginUser } from "../utils/Thunks";
 
 const LoginPage = () => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -16,10 +15,8 @@ const LoginPage = () => {
 		email: "",
 		password: "",
 	});
-	const [error, setError] = useState(null);
 	const dispatch = useDispatch();
-	const token = useSelector((store) => store.auth.authToken);
-	const toast = useToast();
+	const { authToken, loading, error } = useSelector((store) => store.auth);
 
 	function handleChange(e) {
 		const { name, value } = e.target;
@@ -29,34 +26,12 @@ const LoginPage = () => {
 		}));
 	}
 
-	async function handleLogin(e) {
+	function handleLogin(e) {
 		e.preventDefault();
-		try {
-			const resp = await api.post("/auth/login", JSON.stringify(formData));
-			const data = resp.data;
-			dispatch(setAuthToken(data.token));
-			toast({
-				title: "User LoggedIn",
-				description: "Welcome back, we missed you.",
-				status: "success",
-				duration: 3000,
-				isClosable: true,
-			});
-		} catch (err) {
-			const data = err.response.data;
-
-			setError(data.error);
-			toast({
-				title: data.error,
-				description: data.message,
-				status: "error",
-				duration: 3000,
-				isClosable: true,
-			});
-		}
+		dispatch(loginUser(formData));
 	}
 
-	if (token) {
+	if (authToken) {
 		return <Navigate to="/" />;
 	}
 
@@ -114,7 +89,17 @@ const LoginPage = () => {
 								onClick={handleLogin}
 								className="border-2  border-black rounded-md bg-pink-400 text-white p-2 px-3 w-full"
 							>
-								Log In
+								{loading ? (
+									<Spinner
+										thickness="2px"
+										speed="0.65s"
+										emptyColor="gray.200"
+										color="blue.500"
+										size="lg"
+									/>
+								) : (
+									"Log In"
+								)}
 							</button>
 						</form>
 						<p>

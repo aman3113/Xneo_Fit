@@ -5,10 +5,9 @@ import { Link, Navigate } from "react-router-dom";
 import { BiUser } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useToast } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import signup from "../images/signup.jpg";
-import api from "../utils/Axios";
-import { setAuthToken } from "../redux/AuthSlice";
+import { signupUser } from "../utils/Thunks";
 
 const SignUpPage = () => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -18,10 +17,8 @@ const SignUpPage = () => {
 		email: "",
 		password: "",
 	});
-	const [error, setError] = useState(null);
 	const dispatch = useDispatch();
-	const toast = useToast();
-	const token = useSelector((store) => store.auth.authToken);
+	const { authToken, loading, error } = useSelector((store) => store.auth);
 
 	function handleChange(e) {
 		const { name, value } = e.target;
@@ -33,38 +30,18 @@ const SignUpPage = () => {
 
 	async function handleSignUP(e) {
 		e.preventDefault();
-		try {
-			if (
-				formData.firstName.trim() === "" ||
-				formData.email.trim() === "" ||
-				formData.password.trim() === ""
-			) {
-				return alert("Please fill all fields.");
-			}
-			const resp = await api.post("/auth/signup", JSON.stringify(formData));
-			const data = resp.data;
-			dispatch(setAuthToken(data.token));
-			toast({
-				title: "Account created.",
-				description: "We've created your account for you.",
-				status: "success",
-				duration: 3000,
-				isClosable: true,
-			});
-		} catch (err) {
-			const data = err.response.data;
-			setError(data.error);
-			toast({
-				title: data.message,
-				description: data.error,
-				status: "error",
-				duration: 3000,
-				isClosable: true,
-			});
+		if (
+			formData.firstName.trim() === "" ||
+			formData.email.trim() === "" ||
+			formData.password.trim() === ""
+		) {
+			return alert("Please fill all fields.");
 		}
+
+		dispatch(signupUser(formData));
 	}
 
-	if (token) {
+	if (authToken) {
 		return <Navigate to="/" />;
 	}
 
@@ -138,7 +115,17 @@ const SignUpPage = () => {
 								onClick={handleSignUP}
 								className="border-2  border-black rounded-md bg-pink-400 text-white p-2 px-3 w-full"
 							>
-								Sign Up
+								{loading ? (
+									<Spinner
+										thickness="2px"
+										speed="0.65s"
+										emptyColor="gray.200"
+										color="blue.500"
+										size="lg"
+									/>
+								) : (
+									"Sign Up"
+								)}
 							</button>
 						</form>
 						<p>

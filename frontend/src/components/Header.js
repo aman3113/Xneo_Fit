@@ -19,6 +19,8 @@ import { Link } from "react-router-dom";
 const Header = () => {
 	const dispatch = useDispatch();
 	const { user, error, loading } = useSelector((store) => store.user);
+	const { authToken, error: deleteError } = useSelector((store) => store.auth);
+
 	const isLoggedIn = useSelector((store) => store.auth.isLoggedIn);
 	const [openUserModal, setOpenUserModal] = useState(false);
 	const [editProfile, setEditProfile] = useState(false);
@@ -41,6 +43,11 @@ const Header = () => {
 		e.preventDefault();
 		dispatch(updateUser(formData));
 		setEditProfile(false);
+	}
+
+	function handleDeleteUser() {
+		dispatch(deleteUser());
+		setOpenUserModal(false);
 	}
 
 	useEffect(() => {
@@ -109,8 +116,10 @@ const Header = () => {
 					</DrawerHeader>
 
 					<DrawerBody>
-						{error && (
-							<p className="text-2xl text-red-600 text-center">{error}</p>
+						{(error || deleteError) && (
+							<p className="text-2xl text-red-600 text-center">
+								{error || deleteError}
+							</p>
 						)}
 						{loading ? (
 							<div className="flex justify-center">
@@ -214,7 +223,7 @@ const Header = () => {
 
 								<button
 									className="border-2 border-black hover:bg-pink-50 px-3 py-1 rounded-md text-pink-400 font-semibold"
-									onClick={() => dispatch(deleteUser())}
+									onClick={handleDeleteUser}
 								>
 									Delete Account
 								</button>
